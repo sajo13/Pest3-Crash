@@ -2,20 +2,17 @@
 
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\User;
-use App\Models\Contact; // Assuming you have a Contact model
-use Illuminate\Support\Facades\Session;
+use App\Models\Contact;
 
 
-it("store test", function () {
-
-    Session::start();
+it("store test", function ($email) {
 
     $contactData = [
         'account_id' => 1,
         'organization_id' => 1,
         'first_name' => \Pest\Faker\fake()->firstName,
         'last_name' => \Pest\Faker\fake()->lastName,
-        'email' => \Pest\Faker\fake()->email,
+        'email' => $email,
         'phone' => \Pest\Faker\fake()->e164PhoneNumber,
         'address' => '1 Test Street',
         'city' => 'Testerfield',
@@ -41,4 +38,4 @@ it("store test", function () {
         ->phone->toBePhoneNumber()
         ->region->toBe('Derbyshire')
         ->country->toBeIn(['US', 'CA']);
-});
+})->with('valid emails');
