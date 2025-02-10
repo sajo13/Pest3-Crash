@@ -95,3 +95,27 @@ test('can search for contacts', function () {
         );
 });
 
+test('cannot view deleted contacts', function () {
+    $this->user->account->contacts()->firstWhere('first_name', 'Martin')->delete();
+
+    $this->actingAs($this->user)
+        ->get('/contacts')
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Contacts/Index')
+            ->has('contacts.data', 1)
+            ->where('contacts.data.0.name', 'Lynn Kub')
+        );
+});
+
+test('can filter to view deleted contacts', function () {
+    $this->user->account->contacts()->firstWhere('first_name', 'Martin')->delete();
+
+    $this->actingAs($this->user)
+        ->get('/contacts?trashed=with')
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Contacts/Index')
+            ->has('contacts.data', 2)
+            ->where('contacts.data.0.name', 'Martin Abbott')
+            ->where('contacts.data.1.name', 'Lynn Kub')
+        );
+});
