@@ -31,3 +31,6 @@ it('throws an expect exception', function () {
 })->skip('skip expectation')
     ->group('current');;
 
+//php artisan test --coverage
+
+//php artisan test --parallel
