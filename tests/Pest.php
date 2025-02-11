@@ -12,6 +12,7 @@
 */
 
 use App\Models\User;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\ExpectationFailedException;
 
 pest()->extend(Tests\TestCase::class)
@@ -41,6 +42,10 @@ expect()->extend('toBePhoneNumber', function () {
     }
 });
 
+
+expect()->intercept('toContain', TestResponse::class, function (...$value) {
+    $this->value->assertInertia(fn (\Inertia\Testing\AssertableInertia $inertia) => $inertia->has(...$value));
+});
 /*
 |--------------------------------------------------------------------------
 | Functions
